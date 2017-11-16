@@ -10,9 +10,7 @@ date:2017/9/21
 import json
 import time
 import logging
-import random
 import sys
-from datetime import datetime
 import csv
 import requests
 
@@ -20,33 +18,8 @@ FMT = '%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s'
 logging.basicConfig(level=logging.INFO,
                     format=FMT,
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='log/userinfo_test.log',
+                    filename='log/userinfo_1000000.log',
                     filemode='w')
-
-
-def datetime_to_timestamp_in_milliseconds(d):
-    def current_milli_time(): return str(int(round(time.time() * 1000)))
-    return current_milli_time()
-
-
-def LoadUserAgent(filename):
-    """
-    filename:string,path to user-agent file
-    """
-    ualist = []
-    with open(filename, 'r') as f:
-        for line in f.readlines():
-            if line:
-                ualist.append(line.strip()[1:-1])
-    random.shuffle(ualist)
-    return ualist
-
-UAS = LoadUserAgent('user_agents.txt')
-proxies = {'https': 'https://60.255.186.169:8888',
-            'https': 'https://14.221.164.10:9797',
-            
-
-}
 
 
 class GetUser():
@@ -57,43 +30,35 @@ class GetUser():
         self.text = None
         self.videoNumber = 0
         self.fansNumber = 0
-        self.useragent = random.choice(UAS)
-        # print(self.useragent)
-        # self.headers = {'Accept': 'application/json, text/plain, */*',
-        #                 'Accept-Encoding': 'gzip, deflate',
-        #                 'Accept-Language': 'zh-CN,zh;q=0.8',
-        #                 'Connection': 'keep-alive',
-        #                 'Content-Length': '32',
-        #                 'Content-Type': 'application/x-www-form-urlencoded',
-        #                 'Cookie': 'UM_distinctid=15b9449b43c1-04dfdd66b40759-51462d15-1fa400-15b9449b43d83; fts=1492841510; sid=j4j61vah; purl_token=bilibili_1492841536; buvid3=30EA0852-5019-462F-B54B-1FA471AC832F28080infoc; rpdid=iwskokplxkdopliqpoxpw; _cnt_pm=0; _cnt_notify=0; _qddaz=QD.cbvorb.47xm5.j1t4z5yc; pgv_pvi=9558976512; pgv_si=s2784223232; _dfcaptcha=02d046fd3cc2bfd2ce6724f8b2185887; CNZZDATA2724999=cnzz_eid%3D1176255236-1492841785-http%253A%252F%252Fspace.bilibili.com%252F%26ntime%3D1492857985',
-        #                 'Host': 'space.bilibili.com',
-        #                 'Origin': 'https://space.bilibili.com',
-        #                 'Referer': 'https://space.bilibili.com/{}/'.format(self.uid),
-                        
-        #                 'X-Requested-With': 'XMLHttpRequest'}
-        self.headers={'Referer': 'https://space.bilibili.com/' + str(self.uid) + '?from=search&seid=' + str(random.randint(10000, 50000)),
-                        'User-Agent': self.useragent
-                        }
-        # print(self.headers)
+        self.headers = {'Accept': 'application/json, text/plain, */*',
+                        'Accept-Encoding': 'gzip, deflate',
+                        'Accept-Language': 'zh-CN,zh;q=0.8',
+                        'Connection': 'keep-alive',
+                        'Content-Length': '32',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Cookie': 'UM_distinctid=15b9449b43c1-04dfdd66b40759-51462d15-1fa400-15b9449b43d83; fts=1492841510; sid=j4j61vah; purl_token=bilibili_1492841536; buvid3=30EA0852-5019-462F-B54B-1FA471AC832F28080infoc; rpdid=iwskokplxkdopliqpoxpw; _cnt_pm=0; _cnt_notify=0; _qddaz=QD.cbvorb.47xm5.j1t4z5yc; pgv_pvi=9558976512; pgv_si=s2784223232; _dfcaptcha=02d046fd3cc2bfd2ce6724f8b2185887; CNZZDATA2724999=cnzz_eid%3D1176255236-1492841785-http%253A%252F%252Fspace.bilibili.com%252F%26ntime%3D1492857985',
+                        'Host': 'space.bilibili.com',
+                        'Origin': 'https://space.bilibili.com',
+                        'Referer': 'https://space.bilibili.com/{}/'.format(self.uid),
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36',
+                        'X-Requested-With': 'XMLHttpRequest'}
+
     # 获取用户信息
     def getUserInfo(self):
         url = 'https://space.bilibili.com/ajax/member/GetInfo'
         try:
-            #data = {'mid': '{}'.format(
-            #   self.uid), '_': '1492863092419', 'csrf': ''}
-            data = {'mid': str(self.uid), '_': datetime_to_timestamp_in_milliseconds(datetime.now())}
-            # print(data)
-            r = requests.post(url, headers=self.headers,
-                              data=data, proxies=proxies)
+            data = {'mid': '{}'.format(
+                self.uid), '_': '1492863092419', 'csrf': ''}
+
+            r = requests.post(url, headers=self.headers, data=data)
             r.raise_for_status()
             r.encoding = r.apparent_encoding
             self.text = json.loads(r.text)
             # print(self.text)
             self.get_main_info()  # 获取主要信息
-            
 
         except:
-            logging.error('uid (%s) get error' % self.uid)
+            # logging.error('uid (%s) get error' % self.uid)
             return None
 
     def get_main_info(self):
@@ -116,11 +81,9 @@ class GetUser():
         # fans_num = text['data']['fans']
         watchNumber = data['playNum']
         try:
-            dt = datetime.fromtimestamp(float(data['regtime']))
-            # registerTime = time.ctime(float(data['regtime']))
-            registerTime = dt.strftime('%Y-%m-%d %H:%M:%S')
+            registerTime = time.ctime(float(data['regtime']))
         except:
-            registerTime = 'no'
+            registerTime = 0
         fansNumber = self.get_relation()  # get fansNumber
         videonum_info = self.get_video_num()
         if videonum_info is None:
@@ -170,7 +133,7 @@ class GetUser():
         video_num = text['data']['count']
         video_pages = text['data']['pages']
         return video_num, video_pages
-# http://api.bilibili.com/cardrich?callback=jQuery17202870352235622704_1482889079913&mid=122541&type=jsonp&_=1482891272353
+
     def get_video_list(self):
         url = 'http://space.bilibili.com/ajax/member/getSubmitVideos'
         params = {"mid": '{}'.format(self.uid)}
@@ -192,7 +155,7 @@ class GetUser():
 
         def get_aids(url, mid, pages):
             """返回所有aid的序列"""
-            vlist = None
+            vlist = []
             for page in range(1, pages + 1):
                 params = {"mid": '{}'.format(mid), "page": '{}'.format(page)}
                 response = requests.get(url, params=params)
@@ -239,7 +202,9 @@ if __name__ == '__main__':
             if u.get_relation() < 5000:  # 取粉丝数大于5000的up主:
                 time.sleep(0.01)
                 continue
-            u.getUserInfo()
+            if not u.getUserInfo():
+                logging.error("uid(%s) info get error" % u.uid)
+                continue
             vlist = u.get_video_list()
             logging.info('---- uid:%s---- vnum:%s -----' %
                          (u.uid, u.videoNumber))
@@ -248,11 +213,16 @@ if __name__ == '__main__':
             csvwriter1.writerow(userinfo)
             csvwriter2 = csv.writer(f2)
             if vlist:
-                aids = list(vlist)
+                try:
+                    aids = list(vlist)
+                except:
+                    logging.error("%s get vlist errror" % u.uid)
+                    continue
             else:
                 if u.videoNumber:
-                    logging.error('uid %d vlist get error' % u.uid)
+                    logging.error("%s get vlist error" % u.uid)
                     continue
                 aids = []
             csvwriter2.writerow([u.uid, u.videoNumber, aids])
             # time.sleep(1)
+

@@ -9,6 +9,14 @@ from bs4 import BeautifulSoup
 from getuserinfo import *
 from getvideoinfo import *
 
+# comment
+# http://api.bilibili.com/x/v2/reply?callback=jQuery17202870352235622704_1482889079904&jsonp=jsonp&pn=1&type=1&oid=170001&sort=0&_=1482889773903
+
+# userinfo
+# http://api.bilibili.com/cardrich?callback=jQuery17202870352235622704_1482889079913&mid=2325015&type=jsonp&_=1482891272353
+
+# videoinfo
+# https://api.bilibili.com/x/web-interface/archive/stat?aid=170001
 # 数据库连接语句，请手动修改
 try:
     conn = pymysql.connect(host='127.0.0.1', port=3306, user='root',

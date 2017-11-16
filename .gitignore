@@ -108,3 +108,9 @@ ENV/
 *~
 *.swap
 *.swo
+
+# temp data
+vlist/*
+uinfo/*
+vinfo/*
+data/*
