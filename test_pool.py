@@ -38,7 +38,7 @@ def get_info(mid):
 
 
 def main():
-    NUMS = list(range(1, 200))
+    NUMS = list(range(1, 1000))
     pool = ThreadPool(10)
     try:
         results = pool.map(get_info, NUMS)
