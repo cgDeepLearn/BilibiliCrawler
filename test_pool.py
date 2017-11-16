@@ -1,8 +1,8 @@
 import time
 import csv
+import random
 from multiprocessing.dummy import Pool as ThreadPool
-from getuserinfo import GetUser
-
+from getuserinfo_v2 import BiliUser
 
 def cal(num):
     try:
@@ -29,17 +29,18 @@ def test():
     print(results)
 
 def get_info(mid):
-    gu = GetUser(mid)
-    fans = gu.get_relation()
+    gu = BiliUser(mid)
+    info = gu.getUserInfo()
     # gu.getUserInfo()
     # print(mid, gu.info)
     # return gu.info
-    return mid, fans
+    #time.sleep(1)
+    return info
 
 
-def main():
-    NUMS = list(range(1, 1000))
-    pool = ThreadPool(10)
+def go_get(start, end):
+    NUMS = list(range(start, end))
+    pool = ThreadPool(4)
     try:
         results = pool.map(get_info, NUMS)
     except Exception as e:
@@ -49,7 +50,7 @@ def main():
     pool.close()
     pool.join()
 
-    with open('test.csv', 'w', encoding='utf8', newline='') as f:
+    with open('uinfo/uinfo_test.csv', 'a', encoding='utf8', newline='') as f:
         for result in results:
             if result:
                 csvwriter = csv.writer(f)
@@ -58,4 +59,8 @@ def main():
 
 if __name__ == '__main__':
     #test()
-    main()
+    start, end, step = 1, 10000, 100
+    for loop in range(start, end, step):
+        go_get(loop, loop + step)
+        secs = round(random.uniform(15, 25), 2)  # 随机休息时间间隔
+        time.sleep(secs)
