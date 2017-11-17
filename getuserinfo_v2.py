@@ -5,18 +5,15 @@ change url to api.bilibili
 """
 
 
-# http://api.bilibili.com/cardrich?callback=jQuery17202870352235622704_1482889079913&mid=122541&type=jsonp&_=1482891272353
-
-
 import json
-import time
 import random
-import csv
 import logging
-import requests
 from datetime import datetime
+import requests
+import configparser
 
-
+CONFIG = configparser.ConfigParser()
+CONFIG.read('bilibili.cfg')
 FMT = '%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s'
 logging.basicConfig(level=logging.INFO,
                     format=FMT,
@@ -71,7 +68,8 @@ class BiliUser():
         self.info = None
 
     def getUserInfo(self):
-        url = 'http://api.bilibili.com/cardrich'
+        url = CONFIG.get('url', 'url_user')
+        
         timestamp_ms = get_timestamp()
         params = {'mid': str(self.uid), '_': '{}'.format(timestamp_ms)}
         headers = {'User-Agent': random.choice(UAS)}

@@ -81,6 +81,7 @@ celerybeat-schedule
 
 # dotenv
 .env
+bilibili.cfg
 
 # virtualenv
 .venv
@@ -115,3 +116,4 @@ uinfo/*
 vinfo/*
 data/*
 log/*
+
