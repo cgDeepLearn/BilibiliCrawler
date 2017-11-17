@@ -38,7 +38,7 @@ def get_info(mid):
     return info
 
 
-def go_get(start, end, fileindex):
+def go_get(start, end):
     NUMS = list(range(start, end))
     pool = ThreadPool(4)
     try:
@@ -50,23 +50,17 @@ def go_get(start, end, fileindex):
     pool.close()
     pool.join()
 
-    with open('uinfo/uinfo_{}.csv'.format(fileindex), 'a', encoding='utf8', newline='') as f:
+    with open('uinfo/uinfo_test.csv', 'a', encoding='utf8', newline='') as f:
         for result in results:
             if result:
                 csvwriter = csv.writer(f)
                 csvwriter.writerow(result)
-
+    
 
 if __name__ == '__main__':
     #test()
-    # 1000一个文件,10个文件
-    uid_start = int(input("请输入开始uid的10000整数倍数(0,1...10...): "))
-    num = int(input("爬取多少轮(10000个id一轮): "))
-    # num = 10  # 每次跑10轮
-    size = 10000  # 每个文件10000个
-    for i in range(uid_start, uid_start + num):
-        start, end, step = size * i + 1, size * (i + 1) , 100
-        for loop in range(start, end, step):
-            go_get(loop, loop + step, i + 1)
-            secs = round(random.uniform(10, 15), 2)  # 随机休息时间间隔
-            time.sleep(secs)
+    start, end, step = 1, 10000, 100
+    for loop in range(start, end, step):
+        go_get(loop, loop + step)
+        secs = round(random.uniform(15, 25), 2)  # 随机休息时间间隔
+        time.sleep(secs)

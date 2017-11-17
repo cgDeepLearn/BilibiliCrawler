@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO,
                     format=FMT,
                     datefmt='%a, %d %b %Y %H:%M:%S',
                     filename='log/userinfo_test.log',
-                    filemode='w')
+                    filemode='a')
 
 def LoadUserAgent(filename):
     """
@@ -81,7 +81,9 @@ class BiliUser():
             res.raise_for_status()
         except Exception as e:
             # print(e)
-            logging.error(e)
+            msg = 'uid({}) get error'.format(self.uid)
+            logging.error(msg)
+            # logging.error(e)
             return None
         text = json.loads(res.text)
         if text['code'] == 0:
@@ -99,5 +101,12 @@ class BiliUser():
             return self.info
         
         else:
+            msg = 'uid({}) request code return error'.format(self.uid)
+            logging.info(msg)
             return None
 
+
+if __name__ == '__main__':
+    gu = BiliUser(1)
+    gu.getUserInfo()
+    print(gu.info)
