@@ -1,6 +1,12 @@
+"""
+get user info 
+"""
+
+
 import time
 import csv
 import random
+import sys
 from multiprocessing.dummy import Pool as ThreadPool
 from getuserinfo_v2 import BiliUser
 
@@ -63,12 +69,13 @@ def go_get(start, end, fileindex):
 
 if __name__ == '__main__':
     # 10000(size)个id一个文件,10个文件
-    try:
-        size = int(input("请输入每轮抓取的user数量size:(10000默认)"))
-    except:
-        size = 10000
-    uid_start = int(input("请输入开始uid的size整数倍数(0,1...10...): "))
-    num = int(input("爬取多少轮(size个id一轮): "))
+    # try:
+    #     size = int(input("请输入每轮抓取的user数量size:(10000默认)"))
+    # except:
+    #     size = 10000
+    # uid_start = int(input("请输入开始uid的size整数倍数(0,1...10...): "))
+    # num = int(input("爬取多少轮(size个id一轮): "))
+    size, uid_start, num = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
     # num = 10  # 每次跑10轮
     #size = 10000  # 每个文件10000个(size是step的整数倍)
     for i in range(uid_start, uid_start + num):
