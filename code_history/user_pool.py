@@ -84,6 +84,6 @@ if __name__ == '__main__':
         print('===第{}轮===:(每轮size:{})'.format(i + 1, size))
         for loop in range(start, end, step):
             go_get(loop, loop + step, i + 1)
-            # 请求不要过于频繁，不要过于增加服务器的过载哦
+            # 请求不要过于频繁，不要过于增加服务器的负载哦
             secs = round(random.uniform(10, 15), 2)  # 随机休息时间间隔
             time.sleep(secs)

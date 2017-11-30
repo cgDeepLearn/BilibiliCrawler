@@ -43,10 +43,10 @@ def LoadUserAgent(filename):
 
 UAS = LoadUserAgent('user_agents.txt')
 proxies = {'https': 'https://60.255.186.169:8888',
-            'https': 'https://14.221.164.10:9797',
-            
+           'https': 'https://14.221.164.10:9797',
 
-}
+
+           }
 
 
 class GetUser():
@@ -69,19 +69,21 @@ class GetUser():
         #                 'Host': 'space.bilibili.com',
         #                 'Origin': 'https://space.bilibili.com',
         #                 'Referer': 'https://space.bilibili.com/{}/'.format(self.uid),
-                        
+
         #                 'X-Requested-With': 'XMLHttpRequest'}
-        self.headers={'Referer': 'https://space.bilibili.com/' + str(self.uid) + '?from=search&seid=' + str(random.randint(10000, 50000)),
+        self.headers = {'Referer': 'https://space.bilibili.com/' + str(self.uid) + '?from=search&seid=' + str(random.randint(10000, 50000)),
                         'User-Agent': self.useragent
                         }
         # print(self.headers)
     # 获取用户信息
+
     def getUserInfo(self):
         url = 'https://space.bilibili.com/ajax/member/GetInfo'
         try:
-            #data = {'mid': '{}'.format(
+            # data = {'mid': '{}'.format(
             #   self.uid), '_': '1492863092419', 'csrf': ''}
-            data = {'mid': str(self.uid), '_': datetime_to_timestamp_in_milliseconds(datetime.now())}
+            data = {'mid': str(self.uid), '_': datetime_to_timestamp_in_milliseconds(
+                datetime.now())}
             # print(data)
             r = requests.post(url, headers=self.headers,
                               data=data, proxies=proxies)
@@ -90,7 +92,6 @@ class GetUser():
             self.text = json.loads(r.text)
             # print(self.text)
             self.get_main_info()  # 获取主要信息
-            
 
         except:
             logging.error('uid (%s) get error' % self.uid)
@@ -171,6 +172,7 @@ class GetUser():
         video_pages = text['data']['pages']
         return video_num, video_pages
 # http://api.bilibili.com/cardrich?callback=jQuery17202870352235622704_1482889079913&mid=122541&type=jsonp&_=1482891272353
+
     def get_video_list(self):
         url = 'http://space.bilibili.com/ajax/member/getSubmitVideos'
         params = {"mid": '{}'.format(self.uid)}
