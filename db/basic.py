@@ -16,6 +16,6 @@ def get_engine():
 eng = get_engine()
 Base = declarative_base()
 Session = sessionmaker(bind=eng)
-db_session = Session()
+# db_session = Session()
 
-__all__ = ['eng', 'Base', 'db_session']
+__all__ = ['eng', 'Base', 'Session']

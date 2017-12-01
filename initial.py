@@ -4,5 +4,6 @@
 """
 from db import Base, eng
 
+Base.metadata.drop_all(eng)
 Base.metadata.create_all(eng)
 print("done!")

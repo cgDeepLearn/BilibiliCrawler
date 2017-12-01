@@ -7,7 +7,7 @@ import csv
 import os
 from queue import Queue
 from biliapi import BiliUser, BiliVideo
-from db import DBOperation, Session
+from db import Session
 from utils import Producer, Consumer, Timer
 from config import BASE_DIR
 
@@ -16,13 +16,13 @@ def crawl2db(getsession, start, end):
     """多线程只使用一个连接会存在一些问题,建立一个session池每个线程一个session"""
     Q = Queue()
     mythreads = []
-    pthread = Producer(Q, start=start, end=end, func=lambda x: (x,), sleepsec=0.1)
+    pthread = Producer(Q, start=start, end=end, func=BiliUser.getVideoList, sleepsec=0.1)
     mythreads.append(pthread)
     consumer_num = 4 # 4个消费者线程
     sessions = [getsession() for _ in range(consumer_num)]
     for i in range(consumer_num):
         db_session = sessions[i] # 每个线程一个session
-        cthread = Consumer(Q, session=db_session, func=BiliUser.store_user, sleepsec=0.0)
+        cthread = Consumer(Q, session=db_session, func=BiliVideo.store_video, sleepsec=0.0)
         mythreads.append(cthread)
     with Timer() as t:
         for thread in mythreads:
@@ -44,11 +44,11 @@ def crawl2csv(filename, start, end):
     with open(filename, 'w', encoding='utf8', newline='') as fwriter:
         mycsvwriter = csv.writer(fwriter)
         mythreads = []
-        pthread = Producer(Q, start=start, end=end, func=lambda x: (x,), sleepsec=0.1)
+        pthread = Producer(Q, start=start, end=end, func=BiliUser.getVideoList, sleepsec=0.1)
         mythreads.append(pthread)
         consumer_num = 4 # 4个消费者线程
         for _ in range(consumer_num):
-            cthread = Consumer(Q, csvwriter=mycsvwriter, func=BiliUser.store_user, sleepsec=0.0)
+            cthread = Consumer(Q, csvwriter=mycsvwriter, func=BiliVideo.store_video, sleepsec=0.0)
             mythreads.append(cthread)
         with Timer() as t:
             for thread in mythreads:
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         start, end = sys.argv[2], sys.argv[3]
 
     if mode == 'file':
-        filepath = os.path.join(BASE_DIR, 'data/userinfo_%s_%s.csv' % (start, end))
+        filepath = os.path.join(BASE_DIR, 'data/videoinfo_%s_%s.csv' % (start, end))
         crawl2csv(filepath, int(start), int(end))
     elif mode == 'db':
         crawl2db(Session, int(start), int(end))

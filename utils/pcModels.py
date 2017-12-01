@@ -43,20 +43,24 @@ class Producer(Thread):
 
 class Consumer(Thread):
     """消费者"""
-    def __init__(self, queue, func, sleepsec=0.01):
+    def __init__(self, queue, session=None, csvwriter=None, func=None, sleepsec=0.01):
         super(Consumer, self).__init__()
         self._queue = queue
         self._func = func
+        self._session = session
+        self._csvwriter = csvwriter
         self._sleepsec = sleepsec
     
     def run(self):
         while 1:
             if self._queue.empty():
-                time.sleep(1)
+                time.sleep(0.1)
             else:
                 index, data = self._queue.get()
                 if data is None:  # 任务结束标记
                     break
-                info = self._func(data)
+                self._func(data, session=self._session, csvwriter=self._csvwriter)
+                
+                # info = self._func(data)
 
-                print('[-] consumed %s_%s\n' % (index, data), info)
+                print('[-] consumed %s_%s\n' % (index, data))

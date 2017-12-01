@@ -7,7 +7,7 @@ import csv
 import os
 from queue import Queue
 from biliapi import BiliUser, BiliVideo
-from db import DBOperation, Session
+from db import Session
 from utils import Producer, Consumer, Timer
 from config import BASE_DIR
 

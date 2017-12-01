@@ -7,17 +7,21 @@ import random
 import requests
 from config import get_user_agents, get_urls, get_key
 from logger import bilivideolog
+from db import BiliVideoInfo, DBOperation
 from .support import get_timestamp
 
 
 class BiliVideo():
     """通过uid获取Bilibili Video Info"""
+    field_keys = ('mid','aid','tid','cid','typename','arctype','title','pic','pages','created',
+                    'view','danmaku','reply','favorite','coin','share',
+                    'now_rank','his_rank','like','no_reprint','copyright')
 
     def __init__(self, aid):
         """
         aid: video id
         -----info format-----:
-        ('mid','aid','tid','cid',typename','arctype','title','pic','pages','created') +
+        ('mid','aid','tid','cid','typename','arctype','title','pic','pages','created') +
         ('view','danmaku','reply','favorite','coin','share',
         'now_rank','his_rank','like','no_reprint','copyright')
         """
@@ -42,7 +46,7 @@ class BiliVideo():
             return None
         data = json.loads(res.text)
         if 'mid' in data:
-            # ('mid','aid','tid','cid',typename','arctype','title','pic','pages','created')
+            # ('mid','aid','tid','cid','typename','arctype','title','pic','pages','created')
             related_info = ( data['mid'], self.aid,  data['tid'],
                          data['cid'], data['typename'], data['arctype'],
                          data['title'], data['pic'],
@@ -95,5 +99,23 @@ class BiliVideo():
         except Exception:
             info = None
         return info
+
+    @classmethod
+    def store_video(cls, aid, session=None, csvwriter=None):
+        """session, csvwriter 二选一都没有直接打印"""
+        info = cls.getVideoInfo(aid)
+        if info:
+            new_video = BiliVideoInfo(**dict(zip(cls.field_keys, info)))
+            if session:
+                DBOperation.add(new_video, session)
+                return True
+            elif csvwriter:
+                csvwriter.writerow(info)
+                return True
+            else:
+                print(info)
+                return True
+        else:
+            return False
 
 

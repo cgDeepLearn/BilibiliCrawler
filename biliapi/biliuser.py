@@ -94,24 +94,34 @@ class BiliUser():
                 params = {"mid": '{}'.format(mid), "page": '{}'.format(page),
                             '_': '{}'.format(timestamp_ms)}
                 try:
-                    response = requests.get(url, headres=headers, params=params)
+                    response = requests.get(url, headers=headers, params=params)
                     text = json.loads(response.text)
                     vlist = text['data']['vlist']
                     for item in vlist:
                         yield(item['aid'])
-                except Exception:
-                    msg = 'uid({}) vlist get error'.format(mid)
+                except Exception as e:
+                    msg = 'uid({}) vlist get error and\n {}'.format(mid, msg)
                     biliuserlog.error(msg)
                     return None
         
         return get_aids(url, uid, video_pages)
 
     @classmethod
-    def store_user(cls, mid):
+    def store_user(cls, mid, session=None, csvwriter=None):
+        """session：
+        None：csvwriter
+        not None：:ORM"""
         info = cls.getUserInfo(mid)
         if info:
             new_user = BiliUserInfo(**dict(zip(cls.field_keys, info)))
-            DBOperation.add(new_user)
-            return True
+            if session:
+                DBOperation.add(new_user, session)
+                return True
+            elif csvwriter:
+                csvwriter.writerow(info)
+                return True
+            else:
+                print(info)
+                return True
         else:
             return False
