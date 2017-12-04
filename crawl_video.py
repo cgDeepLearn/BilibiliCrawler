@@ -48,7 +48,7 @@ def crawl2csv(filename, start, end):
         mythreads.append(pthread)
         consumer_num = 4 # 4个消费者线程
         for _ in range(consumer_num):
-            cthread = Consumer(Q, csvwriter=mycsvwriter, func=BiliVideo.store_video, sleepsec=0.01)
+            cthread = Consumer(Q, csvwriter=mycsvwriter, func=BiliVideo.store_video, sleepsec=0.02)
             mythreads.append(cthread)
         with Timer() as t:
             for thread in mythreads:

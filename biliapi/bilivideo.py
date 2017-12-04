@@ -54,7 +54,7 @@ class BiliVideo():
             return related_info
 
         else:
-            msg = 'aid({}) request code return error'.format(self.aid)
+            msg = 'aid({}) basic info request  return error'.format(self.aid)
             bilivideolog.info(msg)
             return None
     
@@ -85,7 +85,7 @@ class BiliVideo():
             return ajax_info
 
         else:
-            msg = 'aid({}) request code return error'.format(self.aid)
+            msg = 'aid({}) ajax request code return error'.format(self.aid)
             bilivideolog.info(msg)
             return None
     
