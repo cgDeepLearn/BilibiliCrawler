@@ -100,7 +100,7 @@ class BiliUser():
                     for item in vlist:
                         yield(item['aid'])
                 except Exception as e:
-                    msg = 'uid({}) vlist get error and\n {}'.format(mid, msg)
+                    msg = 'uid({}) vlist get error and\n {}'.format(mid, e)
                     biliuserlog.error(msg)
                     return None
         
