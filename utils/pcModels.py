@@ -37,7 +37,8 @@ class Producer(Thread):
                     print('[+] produce %s_%s' % (index, pitem))
 
                     time.sleep(self._sleepsec)
-        for _ in range(self._cthread_num * 2):
+        time.sleep(10)
+        for _ in range(self._cthread_num):
             self._queue.put((self._range[1], None))  # 结束任务标记
 
 
