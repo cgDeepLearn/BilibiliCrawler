@@ -17,7 +17,7 @@ class BiliUserInfo(Base):
     displayrank = Column(String(10),default='0')
     regtime = Column(Integer,default=0)
     spacesta = Column(Integer,default=0)
-    birthday = Column(String(12), default='0000-01-01')
+    birthday = Column(String(12), default='0000-00-00') # 存csv日期有0000-01-01、0000/1/1格式注意清理
     place = Column(String(50), default='')
     article = Column(Integer, default=0)
     fans = Column(Integer, default=0)

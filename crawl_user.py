@@ -44,11 +44,11 @@ def crawl2csv(filename, start, end):
     with open(filename, 'w', encoding='utf8', newline='') as fwriter:
         mycsvwriter = csv.writer(fwriter)
         mythreads = []
-        pthread = Producer(Q, start=start, end=end, func=lambda x: (x,), sleepsec=0.1)
+        pthread = Producer(Q, start=start, end=end, func=lambda x: (x,), sleepsec=0.15)
         mythreads.append(pthread)
         consumer_num = 4 # 4个消费者线程
         for _ in range(consumer_num):
-            cthread = Consumer(Q, csvwriter=mycsvwriter, func=BiliUser.store_user, sleepsec=0.0)
+            cthread = Consumer(Q, csvwriter=mycsvwriter, func=BiliUser.store_user, sleepsec=0.05)
             mythreads.append(cthread)
         with Timer() as t:
             for thread in mythreads:

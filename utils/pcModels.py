@@ -13,7 +13,7 @@ from db import BiliUserInfo, BiliVideoInfo, BiliVideoList
 
 class Producer(Thread):
     """生产者"""
-    def __init__(self, queue, start, end, func, sleepsec=0.03, cthread_num=10):
+    def __init__(self, queue, start, end, func, sleepsec=0.3, cthread_num=10):
         """queue：队列
         start,end:生产起止编号
         sleepsec: 休息间隔
@@ -24,7 +24,7 @@ class Producer(Thread):
         super(Producer, self).__init__()
         self._queue = queue
         self._range = (start, end)
-        self._sleepsec = sleepsec
+        self._sleepsec = random.uniform(sleepsec, sleepsec * 2)
         self._cthread_num = cthread_num
         self._func = func 
     
@@ -49,7 +49,7 @@ class Consumer(Thread):
         self._func = func
         self._session = session
         self._csvwriter = csvwriter
-        self._sleepsec = sleepsec
+        self._sleepsec = random.uniform(sleepsec, sleepsec * 2)
     
     def run(self):
         while 1:
