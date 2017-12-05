@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Bili爬取主程序入口
+BiliVideo爬取主程序入口,从userinfo入手，
+如果user有video则生成aid list发送到Producer
 """
 import sys
 import csv
@@ -13,16 +14,17 @@ from config import BASE_DIR
 
 
 def crawl2db(getsession, start, end):
-    """多线程只使用一个连接会存在一些问题,建立一个session池每个线程一个session"""
+    """多线程只使用一个连接会存在一些问题,建立一个session池每个线程一个session
+    视频访问速率有很严格的限制，请调大sleepsec"""
     Q = Queue()
     mythreads = []
-    pthread = Producer(Q, start=start, end=end, func=lambda x: (x,), sleepsec=0.1)
+    pthread = Producer(Q, start=start, end=end, func=BiliUser.getVideoList, sleepsec=0.5)
     mythreads.append(pthread)
     consumer_num = 4 # 4个消费者线程
     sessions = [getsession() for _ in range(consumer_num)]
     for i in range(consumer_num):
         db_session = sessions[i] # 每个线程一个session
-        cthread = Consumer(Q, session=db_session, func=BiliUser.store_user, sleepsec=0.01)
+        cthread = Consumer(Q, session=db_session, func=BiliVideo.store_video, sleepsec=0.5)
         mythreads.append(cthread)
     with Timer() as t:
         for thread in mythreads:
@@ -38,17 +40,18 @@ def crawl2db(getsession, start, end):
 
 
 def crawl2csv(filename, start, end):
-    """sleep sec 可以用random生成在一个范围的正态分布更好些"""
+    """sleep sec 可以用random生成在一个范围的正态分布更好些
+    start, end: up主mid范围"""
     Q = Queue()
     
     with open(filename, 'w', encoding='utf8', newline='') as fwriter:
         mycsvwriter = csv.writer(fwriter)
         mythreads = []
-        pthread = Producer(Q, start=start, end=end, func=lambda x: (x,), sleepsec=0.1)
+        pthread = Producer(Q, start=start, end=end, func=BiliUser.getVideoList, sleepsec=0.15)
         mythreads.append(pthread)
         consumer_num = 4 # 4个消费者线程
         for _ in range(consumer_num):
-            cthread = Consumer(Q, csvwriter=mycsvwriter, func=BiliUser.store_user, sleepsec=0.01)
+            cthread = Consumer(Q, csvwriter=mycsvwriter, func=BiliVideo.store_video, sleepsec=0.01)
             mythreads.append(cthread)
         with Timer() as t:
             for thread in mythreads:
@@ -73,7 +76,7 @@ if __name__ == '__main__':
         start, end = sys.argv[2], sys.argv[3]
 
     if mode == 'file':
-        filepath = os.path.join(BASE_DIR, 'data/userinfo_%s_%s.csv' % (start, end))
+        filepath = os.path.join(BASE_DIR, 'data/videoinfo_byup_%s_%s.csv' % (start, end))
         crawl2csv(filepath, int(start), int(end))
     elif mode == 'db':
         crawl2db(Session, int(start), int(end))

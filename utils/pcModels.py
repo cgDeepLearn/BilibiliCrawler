@@ -60,7 +60,7 @@ class Consumer(Thread):
                 index, data = self._queue.get()
                 if data is None:  # 任务结束标记
                     break
-                self._func(data, session=self._session, csvwriter=self._csvwriter)
+                self._func(index, data, session=self._session, csvwriter=self._csvwriter)
                 
                 # info = self._func(data)
 

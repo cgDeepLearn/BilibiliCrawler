@@ -107,8 +107,10 @@ class BiliUser():
         return get_aids(url, uid, video_pages)
 
     @classmethod
-    def store_user(cls, mid, session=None, csvwriter=None):
-        """session：
+    def store_user(cls, mid, data, session=None, csvwriter=None):
+        """
+        mid,data 为生成的queue的里获取的数据，data参数多余为了兼容store_video
+        session：
         None：csvwriter
         not None：:ORM"""
         info = cls.getUserInfo(mid)

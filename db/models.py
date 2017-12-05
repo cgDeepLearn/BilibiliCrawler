@@ -72,3 +72,25 @@ class BiliVideoInfo(Base):
 
     def __repr__(self):
         return "<BiliVideo(aid=%s,mid=%s)>" % (self.aid, self.mid)
+
+class BiliVideoAjaxInfo(Base):
+    """Bili Video Info"""
+    __tablename__ = 'bilivideo_ajaxinfo'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    mid = Column(String(20))
+    aid = Column(String(20), unique=True)
+    view = Column(String(20))
+    danmaku = Column(Integer)
+    reply = Column(Integer)
+    favorite = Column(Integer)
+    coin = Column(Integer)
+    share = Column(Integer)
+    now_rank = Column(Integer)
+    his_rank = Column(Integer)
+    like = Column(Integer)
+    no_reprint = Column(Integer)
+    copyright = Column(Integer)
+
+    def __repr__(self):
+        return "<BiliVideoAjax(aid=%s,mid=%s)>" % (self.aid, self.mid)

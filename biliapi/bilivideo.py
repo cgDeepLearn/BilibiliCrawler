@@ -7,7 +7,7 @@ import random
 import requests
 from config import get_user_agents, get_urls, get_key
 from logger import bilivideolog
-from db import BiliVideoInfo, DBOperation
+from db import BiliVideoInfo, DBOperation, BiliVideoAjaxInfo
 from .support import get_timestamp
 
 
@@ -16,6 +16,8 @@ class BiliVideo():
     field_keys = ('mid','aid','tid','cid','typename','arctype','title','pic','pages','created',
                     'view','danmaku','reply','favorite','coin','share',
                     'now_rank','his_rank','like','no_reprint','copyright')
+    field_keys_ajax = ('mid', 'aid', 'view','danmaku','reply','favorite','coin','share',
+                    'now_rank','his_rank','like','no_reprint','copyright')  # simple ajax info
 
     def __init__(self, aid):
         """
@@ -34,7 +36,9 @@ class BiliVideo():
         appkey = get_key()
         UAS = get_user_agents()
         params = {'type':'json','appkey': appkey, 'id': str(self.aid), '_': '{}'.format(timestamp_ms)}
+        # print(params)
         headers = {'User-Agent': random.choice(UAS)}
+        # print(headers)
 
         try:
             res = requests.get(url, params=params, headers=headers)
@@ -45,6 +49,7 @@ class BiliVideo():
             bilivideolog.error(msg)
             return None
         data = json.loads(res.text)
+        # print(data)
         if 'mid' in data:
             # ('mid','aid','tid','cid','typename','arctype','title','pic','pages','created')
             related_info = ( data['mid'], self.aid,  data['tid'],
@@ -76,6 +81,7 @@ class BiliVideo():
             bilivideolog.error(msg)
             return None
         text = json.loads(res.text)
+        # print(text)
         if text['code'] == 0:
             data = text['data']
             ajax_info = (data['view'], data['danmaku'],
@@ -92,6 +98,7 @@ class BiliVideo():
     @classmethod
     def getVideoInfo(cls, aid):
         """获取视频全部信息"""
+        # info_basic = (aid, )
         info_basic = cls(aid).getBasicInfo()
         info_ajax = cls(aid).getAjaxInfo()
         try:
@@ -117,5 +124,30 @@ class BiliVideo():
                 return True
         else:
             return False
+    
+    @classmethod
+    def store_video_simpleajax(cls, mid, aid, session=None, csvwriter=None):
+        """session, csvwriter 二选一都没有直接打印
+        只保存mid,aid 和ajax信息"""
+        info_ajax = cls(aid).getAjaxInfo()
+        try:
+            info = (mid, aid) + info_ajax
+        except:
+            info = None
+        if info:
+            new_video = BiliVideoAjaxInfo(**dict(zip(cls.field_keys_ajax, info)))
+            if session:
+                DBOperation.add(new_video, session)
+                return True
+            elif csvwriter:
+                csvwriter.writerow(info)
+                return True
+            else:
+                print(info)
+                return True
+        else:
+            return False
+        
+
 
 
