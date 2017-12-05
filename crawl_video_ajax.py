@@ -24,7 +24,7 @@ def crawl2db(getsession, start, end):
     sessions = [getsession() for _ in range(consumer_num)]
     for i in range(consumer_num):
         db_session = sessions[i] # 每个线程一个session
-        cthread = Consumer(Q, session=db_session, func=BiliVideo.store_video, sleepsec=0.01)
+        cthread = Consumer(Q, session=db_session, func=BiliVideo.store_video_simpleajax, sleepsec=0.01)
         mythreads.append(cthread)
     with Timer() as t:
         for thread in mythreads:
@@ -36,7 +36,7 @@ def crawl2db(getsession, start, end):
         
     # db_session.close()
     print('runtime: %s' % t.elapsed)
-    print('======= All Done! ======')
+    print('======= All Done! =======')
 
 
 def crawl2csv(filename, start, end):
@@ -60,7 +60,7 @@ def crawl2csv(filename, start, end):
                 thread.join()
         
         print('runtime: %s' % t.elapsed)
-        print('======= All Done! ======')
+        print('======= All Done! =======')
 
 
 if __name__ == '__main__':
