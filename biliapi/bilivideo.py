@@ -82,17 +82,22 @@ class BiliVideo():
             return None
         text = json.loads(res.text)
         # print(text)
-        if text['code'] == 0:
-            data = text['data']
-            ajax_info = (data['view'], data['danmaku'],
-                         data['reply'], data['favorite'], data['coin'],
-                         data['share'], data['now_rank'], data['his_rank'],
-                         data['like'], data['no_reprint'], data['copyright'])
-            return ajax_info
+        try:
+            if text['code'] == 0:
+                data = text['data']
+                ajax_info = (data['view'], data['danmaku'],
+                            data['reply'], data['favorite'], data['coin'],
+                            data['share'], data['now_rank'], data['his_rank'],
+                            data['like'], data['no_reprint'], data['copyright'])
+                return ajax_info
 
-        else:
-            msg = 'aid({}) ajax request code return error'.format(self.aid)
-            bilivideolog.info(msg)
+            else:
+                msg = 'aid({}) ajax request code return error'.format(self.aid)
+                bilivideolog.info(msg)
+                return None
+        except TypeError:
+            msg = 'aid({}) text return None'.format(self.aid)
+            bilvideolog.info(msg)
             return None
     
     @classmethod
