@@ -17,9 +17,9 @@ python crawl_user.py file 1 100  # file模式，1 100是开始、结束bilibili�
 - 如果需要使用数据库保存和一些其他的设置，请看下面的使用说明
 
 ## 使用说明
-1. 拉取项目, git clone https://github.com/cgDeepLearn/BilibiliCrawler.git
+### 1. 拉取项目, git clone https://github.com/cgDeepLearn/BilibiliCrawler.git
 
-2. 进入项目主目录， 安装虚拟环境
+### 2. 进入项目主目录， 安装虚拟环境
 - 若已安装anaconda
 ```python
 conda create -n crawlenv python=3.6
@@ -33,7 +33,7 @@ source crawlenv/bin/activate  # 激活虚拟环境，windows下不用source
 pip install -r requirements.txt  # 安装项目依赖
 ```
 
-3. 修改配置文件
+### 3. 修改配置文件
 - 进入config目录，修改config.ini配置文件(默认使用的是postgresql数据库，如果你是使用的是postgresql，只需要将其中的参数替换成你的，下面其他的步骤可以忽略)
 数据库配置选择其中一个你本地安装的即可，将参数更换成你的
 如果你需要更自动化的数据库配置，请移步我的[DB_ORM](https://github.com/cgDeepLearn/DB_ORM)项目
@@ -68,7 +68,7 @@ connect_str = "mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8".format(kwargs['user'
 # sqlite3，mongo等请移步我的DB_ORM项目，其他一些数据库也将添加支持
 ```
 
-4. 运行爬虫
+### 4. 运行爬虫
 - 在主目录激活虚拟环境， 初次运行请执行
 ```python
 python initial.py db # db模式，file模式请将db换成file
