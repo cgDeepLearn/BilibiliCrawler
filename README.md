@@ -17,7 +17,10 @@ python crawl_user.py file 1 100  # file模式，1 100是开始、结束bilibili�
 - 如果需要使用数据库保存和一些其他的设置，请看下面的使用说明
 
 ## 使用说明
-### 1. 拉取项目, git clone https://github.com/cgDeepLearn/BilibiliCrawler.git
+### 1. 拉取项目,
+```
+git clone https://github.com/cgDeepLearn/BilibiliCrawler.git
+```
 
 ### 2. 进入项目主目录， 安装虚拟环境
 - 若已安装anaconda
