@@ -97,7 +97,7 @@ class BiliVideo():
                 return None
         except TypeError:
             msg = 'aid({}) text return None'.format(self.aid)
-            bilvideolog.info(msg)
+            bilivideolog.info(msg)
             return None
     
     @classmethod
