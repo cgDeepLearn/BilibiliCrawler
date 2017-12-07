@@ -61,7 +61,5 @@ class Consumer(Thread):
                 if data is None:  # 任务结束标记
                     break
                 self._func(index, data, session=self._session, csvwriter=self._csvwriter)
-                
-                # info = self._func(data)
 
                 print('[-] consumed %s_%s\n' % (index, data))

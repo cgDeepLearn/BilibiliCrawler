@@ -16,9 +16,10 @@ if __name__ == '__main__':
         data_dir = os.path.join(BASE_DIR, 'data')
         if not os.path.exists(data_dir):
             os.mkdir(data_dir)
+            print('file mode done!')
     elif mode == 'db':
-        # Base.metadata.drop_all(eng)  # 删除表
+        Base.metadata.drop_all(eng)  # 删除表
         Base.metadata.create_all(eng)  # 建立表
-        print("done!")
+        print("db mode done!")
     else:
         print("wrong mode, run by use arg db or file!")
