@@ -118,4 +118,5 @@ data/*
 log/*
 logs/*
 code_history/*
+*.out
 
