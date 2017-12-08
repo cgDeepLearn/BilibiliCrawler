@@ -33,7 +33,7 @@ def crawl2db(getsession, start, end):
         session.close()
         
     # db_session.close()
-    print('runtime: %s' % t.elapsed)
+    print('runtime - (%i_%i) - : %s' % (start, end, t.elapsed))
     print('======= All Done! ======')
 
 
@@ -56,7 +56,7 @@ def crawl2csv(filename, start, end):
             for thread in mythreads:
                 thread.join()
         
-        print('runtime: %s' % t.elapsed)
+        print('runtime - (%i_%i) - : %s s' % (start, end, t.elapsed))
         print('======= All Done! ======')
 
 
