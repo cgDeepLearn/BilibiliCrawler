@@ -4,6 +4,7 @@
 import os
 import json
 import random
+import time
 import requests
 from config import get_user_agents, get_urls
 from logger import biliuserlog
@@ -116,6 +117,8 @@ class BiliUserVideo():
                     msg = 'uid({}) vlist get error and\n {}'.format(mid, e)
                     biliuserlog.error(msg)
                     return None
+            
+            time.sleep(0.1)  # 每页休息一下
 
         return get_videoinfo(url, uid, video_pages)
 
