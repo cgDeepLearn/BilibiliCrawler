@@ -34,7 +34,7 @@ class Producer(Thread):
             if plist:
                 for pitem in plist:
                     self._queue.put((index, pitem))
-                    print('[+] produce %s_%s' % (index, pitem))
+                    # print('[+] produce %s_%s' % (index, pitem))
 
                     time.sleep(self._sleepsec)
         time.sleep(10)
@@ -62,4 +62,4 @@ class Consumer(Thread):
                     break
                 self._func(index, data, session=self._session, csvwriter=self._csvwriter)
 
-                print('[-] consumed %s_%s\n' % (index, data))
+                # print('[-] consumed %s_%s\n' % (index, data))

@@ -42,7 +42,6 @@ class BiliVideoList(Base):
     def __repr__(self):
         return "<BiliUserVideo(mid=%s,aid=%s)>" % (self.mid, self.aid)
 
-
 class BiliVideoInfo(Base):
     """Bili Video Info"""
     __tablename__ = 'bilivideoinfo'
@@ -69,6 +68,38 @@ class BiliVideoInfo(Base):
     like = Column(Integer)
     no_reprint = Column(Integer)
     copyright = Column(Integer)
+
+    def __repr__(self):
+        return "<BiliVideo(aid=%s,mid=%s)>" % (self.aid, self.mid)
+
+class BiliVideoSimpleInfo(Base):
+    """Bili Video Simple Info"""
+    __tablename__ = 'bilivideo_simpleinfo'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    mid = Column(String(20))
+    aid = Column(String(20), unique=True)
+    tid = Column(String(10), default='')
+    # cid = Column(Integer)
+    # typename = Column(String(20), default='')
+    # arctype = Column(String(20), default='')
+    title = Column(String(100), default='')
+    # pic = Column(String(100),default='')
+    # pages = Column(Integer)
+    created = Column(Integer)
+    length = Column(String(10))
+    play = Column(String(20))
+    comment = Column(Integer)
+    danmaku = Column(Integer)
+    favorite = Column(Integer)
+    hide_click = Column(Boolean)
+    #coin = Column(Integer)
+    # share = Column(Integer)
+    #now_rank = Column(Integer)
+    # his_rank = Column(Integer)
+    # like = Column(Integer)
+    #no_reprint = Column(Integer)
+    # copyright = Column(Integer)
 
     def __repr__(self):
         return "<BiliVideo(aid=%s,mid=%s)>" % (self.aid, self.mid)

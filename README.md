@@ -72,7 +72,7 @@ connect_str = "mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8".format(kwargs['user'
 ```
 
 ### 4. 运行爬虫
-- 在主目录激活虚拟环境， 初次运行请执行
+- **在主目录激活虚拟环境， 初次运行请执行**
 ```python
 python initial.py db # db模式，file模式请将db换成file
 # file模式会将抓取结果保存在data目录
@@ -80,28 +80,29 @@ python initial.py db # db模式，file模式请将db换成file
 # 若再次以db模式运行将会drop所有表后再create，初次运行后请慎重再次使用!!!
 # 如果修改添加了表，并不想清空数据，请运行 python create_all.py
 ```
-- 开始抓取示例
+- **开始抓取示例**
 ```python
 python crawl_user.py db 1 10000 # crawl_user 抓取用户数据，db 保存在数据库中， 1 10000为抓取起止id
 python crawl_video_ajax.py db 1 100 # crawl_video_ajax 抓取视频ajax信息保存到数据库中,
+python crawl_user_video.py db 1 10000 #同时抓取user 和videoinfo
 # 示例为uid从1到100的user如果有投稿视频则抓取其投稿视频的信息，
 # 若想通过视频id逐个抓取请运行python crawl_video_by_aid.py db 1 1000
 ```
 
-- 爬取速率控制
+- **爬取速率控制**
 
 程序内已进行了一些抓取速率的设置，但各机器cpu、mem不同抓取速率也不同，请酌情修改\
 太快太慢请修改各crawl中的sleepsec参数,ip会被限制访问频率，overspeed会导致爬取数据不全，\
 之后会添加运行参数speed(high, low),不用再手动配置速率
 
-- 日志
+- **日志**
 
 爬取日志在logs目录\
 user, video分别为用户和视频的爬取日志\
 storage为数据库日志
 如需更换log格式，请修改logger模块
 
-- 后台运行
+- **后台运行**
 
 linux下运行python ......前面加上nohup，例如:
 ```python
@@ -112,7 +113,7 @@ nohup python crawl_user db 1 10000
 nohup python crawl_video_ajax.py db 1 1000 > video_ajaxup_1_1000.out  # 输出将保存在video_ajaxup_1_1000.out中
 ```
 
-- 更多
+- **更多**
 程序多线程使用的生产者消费者模式中产生了程序运行的状况的打印信息，类似如下
 ```python
 produce 1_1
