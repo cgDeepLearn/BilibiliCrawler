@@ -7,7 +7,7 @@ import random
 import time
 import requests
 from config import get_user_agents, get_urls
-from logger import biliuserlog
+from logger import biliuserlog, bilivideolog
 from db import BiliUserInfo, BiliVideoList, DBOperation, BiliVideoSimpleInfo
 from .support import get_timestamp
 
@@ -82,9 +82,9 @@ class BiliUserVideo():
             text = json.loads(response.text)
             video_num = text['data']['count']
             video_pages = text['data']['pages']
-        except Exception:
-            msg = 'user({}) vnum text got error'.format(uid)
-            biliuserlog.error(msg)
+        except Exception as e:
+            msg = 'user({}) vnum text got error and {}'.format(uid, e)
+            bilivideolog.error(msg)
             return None
         # 没投过稿
         if video_num < 1:
@@ -115,7 +115,7 @@ class BiliUserVideo():
                         yield vinfo
                 except Exception as e:
                     msg = 'uid({}) vlist get error and\n {}'.format(mid, e)
-                    biliuserlog.error(msg)
+                    bilivideolog.error(msg)
                     return None
             
                 time.sleep(0.1)  # 每页休息一下
