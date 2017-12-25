@@ -106,7 +106,7 @@ class BiliUser():
                     bilivideolog.error(msg)
                     return None
 
-                time.sleep(0.1)  # 休息一下
+                time.sleep(1)  # 休息一下
 
         return get_aids(url, uid, video_pages)
 
