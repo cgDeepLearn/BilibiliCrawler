@@ -8,17 +8,18 @@ import os
 from queue import Queue
 from biliapi import BiliUserVideo
 from db import Session
-from utils import Producer, Consumer, Timer
+from utils import Producer, Consumer, Timer, Producer2
 from config import BASE_DIR
 
 
 def crawl2db(getsession, start, end):
     """多线程只使用一个连接会存在一些问题,建立一个session池每个线程一个session"""
     Q = Queue()
+    sentinal = (None, None)  # 结束任务标记
     mythreads = []
-    pthread = Producer(Q, start=start, end=end,
+    pthread = Producer2(Q, start=start, end=end,
                        func=lambda x: (x,), sleepsec=0.1)
-    mythreads.append(pthread)
+    # mythreads.append(pthread)
     consumer_num = 4  # 4个消费者线程
     sessions = [getsession() for _ in range(consumer_num)]
     for i in range(consumer_num):
@@ -27,8 +28,12 @@ def crawl2db(getsession, start, end):
                            func=BiliUserVideo.store_user_video, sleepsec=0.01)
         mythreads.append(cthread)
     with Timer() as t:
+        pthread.start()
         for thread in mythreads:
             thread.start()
+        pthread.join()  # 生产者线程阻塞
+        for _ in range(consumer_num):
+            Q.put(sentinal)  # put结束标记
         for thread in mythreads:
             thread.join()
     for session in sessions:
@@ -36,21 +41,22 @@ def crawl2db(getsession, start, end):
 
     # db_session.close()
     print('runtime - (%i_%i) - : %s' % (start, end, t.elapsed))
-    print('======= All Done! ======')
+    print('======= All Done! =======')
 
 
 def crawl2csv(filenames, start, end):
     """sleep sec 可以用random生成在一个范围的正态分布更好些"""
     Q = Queue()
+    sentinal = (None, None)  # 结束任务标记
     userfile, videofile = filenames
     with open(userfile, 'w', encoding='utf8', newline='') as userwriter,\
             open(videofile, 'w', encoding='utf8', newline='') as videowriter:
         usercsvwriter = csv.writer(userwriter)
         videocsvwriter = csv.writer(videowriter)
         mythreads = []
-        pthread = Producer(Q, start=start, end=end,
+        pthread = Producer2(Q, start=start, end=end,
                            func=lambda x: (x,), sleepsec=0.1)
-        mythreads.append(pthread)
+        # mythreads.append(pthread)
         consumer_num = 4  # 4个消费者线程
         for _ in range(consumer_num):
             mycsvwriter = (usercsvwriter, videocsvwriter)
@@ -58,13 +64,17 @@ def crawl2csv(filenames, start, end):
                                func=BiliUserVideo.store_user_video, sleepsec=0.01)
             mythreads.append(cthread)
         with Timer() as t:
+            pthread.start()
             for thread in mythreads:
                 thread.start()
+            pthread.join()
+            for _ in range(consumer_num):
+                Q.put(sentinal)
             for thread in mythreads:
                 thread.join()
 
         print('runtime - (%i_%i) - : %s s' % (start, end, t.elapsed))
-        print('======= All Done! ======')
+        print('======= All Done! =======')
 
 
 if __name__ == '__main__':
