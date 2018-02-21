@@ -1,8 +1,8 @@
 # BilibiliCrawler
 - crawl bilibili user info and video info for data analysis
-- 爬取哔哩哔哩up主信息和up主投稿视频信息，用作数据处理
+- 爬取部分哔哩哔哩up主信息和up主投稿视频信息，用作数据处理与分析学习(不得用于商业和其他侵犯他人权益的用途)
 - 采取了一定的反反爬策略
-- 2018年2月初Bilibili更改了用户页面的api, 用户抓取解析程序需要重构
+- Bilibili更改了用户页面的api, 用户抓取解析程序需要重构
 
 ## 快速开始
 1. 拉取项目, git clone https://github.com/cgDeepLearn/BilibiliCrawler.git
