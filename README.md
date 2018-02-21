@@ -1,13 +1,13 @@
 # BilibiliCrawler
-- crawl bilibili user info and video info for data analysis
-- 爬取部分哔哩哔哩up主信息和up主投稿视频信息，用作数据处理与分析学习(不得用于商业和其他侵犯他人权益的用途)
-- 采取了一定的反反爬策略
-- Bilibili更改了用户页面的api, 用户抓取解析程序需要重构
+- crawl bilibili user info and video info for data analysis。
+- 爬取部分哔哩哔哩up主信息和up主投稿视频信息，用作数据处理与分析学习(不得用于商业和其他侵犯他人权益的用途)。
+- 采取了一定的反反爬策略。
+- Bilibili更改了用户页面的api, 用户抓取解析程序需要重构。
 
 ## 快速开始
 1. 拉取项目, git clone https://github.com/cgDeepLearn/BilibiliCrawler.git
-2. 进入项目主目录，安装虚拟环境crawlenv(请参考使用说明里的虚拟环境安装)
-3. 激活环境并在主目录运行crawl,爬取结果将保存在data目录csv文件中
+2. 进入项目主目录，安装虚拟环境crawlenv(请参考使用说明里的虚拟环境安装)。
+3. 激活环境并在主目录运行crawl,爬取结果将保存在data目录csv文件中。
 ```python
 source activate crawlenv
 python initial.py file  # 初始化file模式
